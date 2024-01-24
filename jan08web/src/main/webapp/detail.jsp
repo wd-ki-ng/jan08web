@@ -62,24 +62,22 @@ $(document).ready(function(){
 	$(".commentUpdate").click(function(){
 		if(confirm("수정하시겠습니까?")){
 			let cno = $(this).siblings(".cno").val();
-			let comment = $(this).closest(".chead").children(".ccoment").text();
-			alert(cno + "   :   " + comment);
-			/* $.ajax({
-				url : './commentEdit',	//주소			따로 순서는 없음.
-				type : 'post',			//get, post
-				dataType : 'text',		//수신타입 json
-				data : {no:cno},		//보낼값
-				success : function(result1){
-					//alert("서버에서 온 값 : " + result);
-					
-				},
-				error : function(request,status,error){
-					alert("문제가 발생했습니다.");
-				}
-			}); //end ajax */
-			});
-		} //end Edit if
+			let comment = $(this).closest(".comment").children(".ccomment");
+			//alert(cno + "   :   " + comment.html());
+			let commentChange = comment.html().replaceAll("<br>", "\r\n");
+			let recommentBox = '<div class="recommentBox">';
+			recommentBox += '<form class="comment-form" action="./cedit" method="post">';
+			recommentBox += '<textarea class="commentcontent" name="comment">' + commentChange + '</textarea>';
+			recommentBox += '<input type="hidden" name="cno" value="' + cno + '">';
+			recommentBox += '<button type="submit" >댓글 수정</button>';
+			recommentBox += '</form></div>';
+			
+			comment.html(recommentBox);
+			$(this).hide();
+		}
+		
 	});//commentEdit 종료
+	
 	
 	//댓글버튼을 누르면 댓글창이 나옴
 	$(".comment-write").hide();
