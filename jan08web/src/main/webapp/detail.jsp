@@ -63,20 +63,65 @@ $(document).ready(function(){
 		if(confirm("수정하시겠습니까?")){
 			let cno = $(this).siblings(".cno").val();
 			let comment = $(this).closest(".comment").children(".ccomment");
-			//alert(cno + "   :   " + comment.html());
 			let commentChange = comment.html().replaceAll("<br>", "\r\n");
 			let recommentBox = '<div class="recommentBox">';
-			recommentBox += '<form class="comment-form" action="./cedit" method="post">';
+			recommentBox += '<form class="comment-form">';
 			recommentBox += '<textarea class="commentcontent" name="comment">' + commentChange + '</textarea>';
-			recommentBox += '<input type="hidden" name="cno" value="' + cno + '">';
-			recommentBox += '<button type="submit" >댓글 수정</button>';
+			recommentBox += '<input type="hidden" class="cno" value="' + cno + '">';
+			recommentBox += '<button type="submit" class="edit-btn">댓글 수정</button>';
 			recommentBox += '</form></div>';
-			
 			comment.html(recommentBox);
 			$(this).hide();
+			//alert(cno + "   :   " + comment.html());
 		}
 		
-	});//commentEdit 종료
+	});//commentUpdate 종료
+	
+	$(".edit-btn").click(function(){
+		let cno = $(this).siblings(".cno").val();
+		let comment = $(this).closest(".recommentBox").children(".commentcontent").text();
+		$.ajax({
+			url : './commentEdit',
+			type : 'post',			
+			dataType : 'text',		
+			data : {'no':cno,
+				'ccomment':commentcontent},		
+			success : function(result){
+				alert("서버에서 온 값 : " + result);
+				if(result == 1){
+					comment.html();
+				} else {
+					alert("수정할  수 없습니다. 관리자에게 문의하세요.")
+				}
+			},
+			error : function(request,status,error){
+				alert("문제가 발생했습니다.");
+			}
+		}); //end ajax
+	});
+		/*$(".edit-btn").click(function(){
+			let cno = $(this).siblings(".cno").val();
+			let comment = $(this).closest(".comment").children(".ccomment");
+			$.ajax({
+				url : './commentEdit',
+				type : 'post',			
+				dataType : 'text',		
+				data : {'no':cno},		
+				success : function(result){
+					//alert("서버에서 온 값 : " + result);
+					if(result == 1){
+						comment.text();
+					} else {
+						alert("수정할  수 없습니다. 관리자에게 문의하세요.")
+					}
+				},
+				error : function(request,status,error){
+					alert("문제가 발생했습니다.");
+				}
+			}); //end ajax
+		});*/
+		
+
 	
 	
 	//댓글버튼을 누르면 댓글창이 나옴
@@ -87,7 +132,9 @@ $(document).ready(function(){
 		//$(".comment-write").show();
 		$(".comment-write").slideToggle('slow');
 	});
-	
+
+
+
 	$("#comment-btn").click(function(){
 		let content = $("#commentcontent").val();
 		let bno = ${detail.no};//여기는 글번호
@@ -207,6 +254,7 @@ $(document).ready(function(){
 				location.href="./edit?no=${detail.no}";
 			}
 		}
+		/* 
 		function commentDel(cno) {
 			var ch = confirm("삭제하시겠습니까?");
 			if(ch){
@@ -218,7 +266,7 @@ $(document).ready(function(){
 			if(ch){
 				location.href="./commentEdit?no=${detail.no}&cno="+cno;
 			}
-		}
+		} */
 	</script>
 		<footer>
 	<c:import url="footer.jsp"/>

@@ -14,55 +14,38 @@ import com.king.dao.CommentDAO;
 import com.king.dto.CommentDTO;
 import com.king.util.Util;
 
-@WebServlet("/commentDel")
-public class CommentDel extends HttpServlet {
+@WebServlet("/commentEdit")
+public class CommentEdit extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+    public CommentEdit() {
+        super();
+    }
 
-	public CommentDel() {
-		super();
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		if (session.getAttribute("mid") != null && request.getParameter("no") != null
-				&& request.getParameter("cno") != null) {
-			CommentDTO dto = new CommentDTO();
-
-			dto.setMid((String) session.getAttribute("mid"));
-			dto.setCno(Util.str2Int(request.getParameter("cno")));
-			// dto.setBoard_no(Util.str2Int(request.getParameter("no")));
-
-			CommentDAO dao = new CommentDAO();
-			int result = dao.commentDelete(dto);
-			if (result == 1) {
-				response.sendRedirect("./detail?no=" + request.getParameter("no"));
-			} else {
-				response.sendRedirect("./error.jsp");
-			}
-
-		} else {
-			response.sendRedirect("./error.jsp");
-		}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		int result = 0;
 		if (session.getAttribute("mid") != null && Util.intCheck2(request.getParameter("no"))) {
 
 			CommentDTO dto = new CommentDTO();
 			dto.setMid((String) session.getAttribute("mid"));
+			dto.setComment(request.getParameter("ccomment"));
 			dto.setCno(Util.str2Int(request.getParameter("no")));
-
+			
+			
 			CommentDAO dao = new CommentDAO();
-			result = dao.commentDelete(dto);
-
-		} else {
-			response.sendRedirect("./error.jsp");
-		}
+			result = dao.commentEdit(dto);
+			
+			
+		} 
+		
 		PrintWriter pw = response.getWriter();
 		pw.print(result);
+
 	}
 
 }
