@@ -33,8 +33,8 @@ public class CommentEdit extends HttpServlet {
 
 			CommentDTO dto = new CommentDTO();
 			dto.setMid((String) session.getAttribute("mid"));
-			dto.setComment(request.getParameter("ccomment"));
 			dto.setCno(Util.str2Int(request.getParameter("no")));
+			//dto.setComment(request.getParameter("comment"));
 			
 			
 			CommentDAO dao = new CommentDAO();

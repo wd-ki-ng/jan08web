@@ -66,30 +66,28 @@ $(document).ready(function(){
 			let commentChange = comment.html().replaceAll("<br>", "\r\n");
 			let recommentBox = '<div class="recommentBox">';
 			recommentBox += '<form class="comment-form">';
-			recommentBox += '<textarea class="commentcontent" name="comment">' + commentChange + '</textarea>';
-			recommentBox += '<input type="hidden" class="cno" value="' + cno + '">';
+			recommentBox += '<textarea class="commentcontent" id="commentcontent">' + commentChange + '</textarea>';
+			recommentBox += '<input type="hidden" class="eno" value="' + cno + '">';
 			recommentBox += '<button type="submit" class="edit-btn">댓글 수정</button>';
 			recommentBox += '</form></div>';
 			comment.html(recommentBox);
 			$(this).hide();
 			//alert(cno + "   :   " + comment.html());
 		}
-		
 	});//commentUpdate 종료
 	
-	$(".edit-btn").click(function(){
+	$(".edit-btn").click(function(commentUpdate){
 		let cno = $(this).siblings(".cno").val();
-		let comment = $(this).closest(".recommentBox").children(".commentcontent").text();
+		let comment = $(this).siblings(".commentcontent");
 		$.ajax({
 			url : './commentEdit',
 			type : 'post',			
 			dataType : 'text',		
-			data : {'no':cno,
-				'ccomment':commentcontent},		
+			data : {'no':cno},
 			success : function(result){
 				alert("서버에서 온 값 : " + result);
 				if(result == 1){
-					comment.html();
+					comment.text(commentChange);
 				} else {
 					alert("수정할  수 없습니다. 관리자에게 문의하세요.")
 				}
