@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+
+body{
+	margin: 0;
+	padding: 0;
+}
+
+.mainstyle{
+	width: 900px;
+	height: 100px;
+	margin: 0 auto;
+	padding-top: 10px;
+}
+
+.mainstyle img{
+	width: 800px;
+	height: 700px;
+}
+
+#clickmenu{
+	text-align: center;
+	font-size: 24pt;
+}
