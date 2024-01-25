@@ -26,21 +26,21 @@ public class CommentEdit extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+
 		HttpSession session = request.getSession();
 		int result = 0;
-		if (session.getAttribute("mid") != null && Util.intCheck2(request.getParameter("no"))) {
+		if (session.getAttribute("mid") != null && Util.intCheck2(request.getParameter("cno"))) {
 
 			CommentDTO dto = new CommentDTO();
 			dto.setMid((String) session.getAttribute("mid"));
-			dto.setCno(Util.str2Int(request.getParameter("no")));
-			//dto.setComment(request.getParameter("comment"));
-			
+			dto.setCno(Util.str2Int(request.getParameter("cno")));
+			dto.setComment(Util.addBR(request.getParameter("comment")));
 			
 			CommentDAO dao = new CommentDAO();
 			result = dao.commentEdit(dto);
 			
 			
+	
 		} 
 		
 		PrintWriter pw = response.getWriter();

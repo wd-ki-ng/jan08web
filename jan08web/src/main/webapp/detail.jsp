@@ -64,62 +64,46 @@ $(document).ready(function(){
 			let cno = $(this).siblings(".cno").val();
 			let comment = $(this).closest(".comment").children(".ccomment");
 			let commentChange = comment.html().replaceAll("<br>", "\r\n");
-			let recommentBox = '<div class="recommentBox">';
-			recommentBox += '<form class="comment-form">';
-			recommentBox += '<textarea class="commentcontent" id="commentcontent">' + commentChange + '</textarea>';
-			recommentBox += '<input type="hidden" class="eno" value="' + cno + '">';
-			recommentBox += '<button type="submit" class="edit-btn">댓글 수정</button>';
-			recommentBox += '</form></div>';
-			comment.html(recommentBox);
 			$(this).hide();
+			let recommentBox = '<div class="recommentBox">';
+			recommentBox += '<textarea class="recommentcontent" name="recommentcontent">' + commentChange + '</textarea>';
+			recommentBox += '<input type="hidden"  name="cno" value="' + cno + '">';
+			recommentBox += '<button class="edit-btn">댓글 수정</button>';
+			recommentBox += '</div>';
+			comment.html(recommentBox);
+			
 			//alert(cno + "   :   " + comment.html());
 		}
 	});//commentUpdate 종료
 	
-	$(".edit-btn").click(function(commentUpdate){
-		let cno = $(this).siblings(".cno").val();
-		let comment = $(this).siblings(".commentcontent");
+	$(document).on('click',".edit-btn",function(){
+		let cno = $(this).prev().val();
+		let recomment = $(this).siblings(".recommentcontent").val();
+		let comment = $(this).parents(".ccomment");
+		
 		$.ajax({
 			url : './commentEdit',
 			type : 'post',			
 			dataType : 'text',		
-			data : {'no':cno},
+			data : {'cno':cno, 'comment':recomment},
 			success : function(result){
-				alert("서버에서 온 값 : " + result);
 				if(result == 1){
-					comment.text(commentChange);
+					//alert("수정이 완료되었습니다.");
+					$(this).parent(".recommentBox").remove();
+					//comment += '<div class="ccomment">${co.comment}</div>';
+					comment.html(recomment.replace(/(?:\r\n|\r|\n)/g,'<br>'));
+					$(".commentUpdate").show();
 				} else {
-					alert("수정할  수 없습니다. 관리자에게 문의하세요.")
+					alert("수정할  수 없습니다. 관리자에게 문의하세요.");
+					//location.href='./deatil?page=${param.page}&no=${param.no}';
+					location.href='./detail?page=${param.page}&no=${detail.no}';
 				}
 			},
-			error : function(request,status,error){
+			error : function(error){
 				alert("문제가 발생했습니다.");
 			}
 		}); //end ajax
 	});
-		/*$(".edit-btn").click(function(){
-			let cno = $(this).siblings(".cno").val();
-			let comment = $(this).closest(".comment").children(".ccomment");
-			$.ajax({
-				url : './commentEdit',
-				type : 'post',			
-				dataType : 'text',		
-				data : {'no':cno},		
-				success : function(result){
-					//alert("서버에서 온 값 : " + result);
-					if(result == 1){
-						comment.text();
-					} else {
-						alert("수정할  수 없습니다. 관리자에게 문의하세요.")
-					}
-				},
-				error : function(request,status,error){
-					alert("문제가 발생했습니다.");
-				}
-			}); //end ajax
-		});*/
-		
-
 	
 	
 	//댓글버튼을 누르면 댓글창이 나옴
@@ -210,7 +194,7 @@ $(document).ready(function(){
 					<button class="xi-comment-o">댓글쓰기</button>
 				<div class="comment-write">
 					<div class="comment-form">
-						<textarea class="commentcontent"  id="commentcontent"></textarea>
+						<textarea id="commentcontent"></textarea>
 						<button id="comment-btn" >댓글쓰기</button>
 					</div>
 				</div>
