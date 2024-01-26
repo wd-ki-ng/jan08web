@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.king.dao.AdminDAO;
 import com.king.dto.MemberDTO;
+import com.king.util.Util;
 
 @WebServlet("/admin/members")
 public class Members extends HttpServlet {
@@ -23,21 +24,29 @@ public class Members extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		AdminDAO dao = new AdminDAO();
-		List<MemberDTO> list = dao.memberList();
-		request.setAttribute("list", list);
+		List<MemberDTO> list = null;
 				
+		if(request.getParameter("grade") == null || request.getParameter("grade").equals("")) {
+			list = dao.memberList();
+		} else {
+			list = dao.memberList(Util.str2Int(request.getParameter("grade")));
+		}
 		
+		request.setAttribute("list", list);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/admin/members.jsp");
 		rd.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getParameter("mno"));
-		System.out.println(request.getParameter("grade"));
 		
+		AdminDAO dao = new AdminDAO();
+		int result = dao.gradeUpdate(Util.str2Int(request.getParameter("grade")),Util.str2Int(request.getParameter("mno")));
 		
-		response.sendRedirect("./members");
+		if(request.getParameter("currentgrade") == null || request.getParameter("currentgrade").equals("")) {			
+			response.sendRedirect("./members");
+		}else {
+			response.sendRedirect("./members?grade=" + request.getParameter("currentgrade"));
+		}
 	}
-
 }

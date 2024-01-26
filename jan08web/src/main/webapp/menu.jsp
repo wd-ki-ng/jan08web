@@ -13,6 +13,7 @@
 				<li onclick="url('./login')">로그인</li></c:when><c:otherwise>
 				<li onclick="url('./myInfo')">${sessionScope.mname }</li>
 				<li onclick="url('./logout')">로그아웃</li></c:otherwise></c:choose>
+				
 				<%-- 
 				<% if(session.getAttribute("mname") == null) { %>
 				<li onclick="url('./login')">로그인</li>

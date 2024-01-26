@@ -21,10 +21,13 @@ $(function(){
 		form.attr('action', './members');
 		form.append($('<input/>', {type : 'hidden', name : 'mno', value : mno}));
 		form.append($('<input/>', {type : 'hidden', name : 'grade', value : val}));
+		<c:if test="${param.grade ne null}">
+		form.append($('<input/>'), {type : 'hidden', name : 'currentgrade' value : ${param.grade}})
+		</c:if>
 		form.appendTo('body');
 		form.submit();
 	});
-});
+
 
 </script>
 </head>
@@ -37,14 +40,22 @@ $(function(){
 					<li onclick="url('./board')"><i class="xi-document"></i> 게시글 관리</li>
 					<li onclick="url('./comments')"><i class="xi-forum-o"></i> 댓글 관리</li>
 					<li onclick="url('./info')"><i class="xi-lock-o"></i> king</li>
-					<li></li>
-					<li></li>
 				</ul>
 			</nav>
 		</div>
 		<div class="main">
 			<article>
 				<h2>회원관리</h2>
+				<div class="member-lists">
+               		<ul>
+               			<li onclick="url('./members?grade=0')"><i class="xi-close-circle-o" id="grade0"></i> 탈퇴</li>
+						<li onclick="url('./members?grade=1')"><i class="xi-minus-circle-o" id="grade1"></i> 강퇴</li>
+						<li onclick="url('./members?grade=2')"><i class="xi-check-circle-o" id="grade2"></i> 정지</li>
+						<li onclick="url('./members?grade=5')"><i class="xi-label-o" id="grade5"></i> 정상</li>
+ 						<li onclick="url('./members?grade=9')"><i class="xi-plus-square-o" id="grade9"></i> 관리자</li>               
+               		</ul>
+           		</div>
+           		
 				<table>
 					<thead>
 					<tr>
