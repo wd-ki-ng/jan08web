@@ -1,8 +1,15 @@
 package com.king.dto;
 //게시판 리스트
 public class BoardDTO {
-	private int no,count, comment;
+	private int no, count, comment, del;
 	private String title, content, write, date, mid, ip;
+
+	public int getDel() {
+		return del;
+	}
+	public void setDel(int del) {
+		this.del = del;
+	}
 	public int getComment() {
 		return comment;
 	}
