@@ -126,5 +126,66 @@ public class AdminDAO extends AbstractDAO {
 		
 		return list;
 	}
-	
+
+	public List<BoardDTO> boardList(String parameter) {
+		List<BoardDTO> list = new ArrayList<BoardDTO>();
+		Connection con = db.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT board_no, board_title, m.mname, board_date,(SELECT board_count FROM boardview bv WHERE bv.board_no = b.board_no) AS count,"
+				+ " (SELECT count(*) FROM comment c WHERE c.board_no=b.board_no) AS comment, board_ip, board_del "
+				+ "FROM board b JOIN member m ON b.mno=m.mno WHERE board_title LIKE CONCAT('%', ?, '%') "
+				+ "OR board_content LIKE CONCAT('%', ?, '%') OR m.mname LIKE CONCAT('%', ?, '%')";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, parameter);
+			pstmt.setString(2, parameter);
+			pstmt.setString(3, parameter);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardDTO e = new BoardDTO();
+				e.setNo(rs.getInt("board_no"));
+				e.setTitle(rs.getString("board_title"));
+				e.setWrite(rs.getString("mname"));
+				e.setDate(rs.getString("board_date"));
+				e.setCount(rs.getInt("count"));
+				e.setComment(rs.getInt("comment"));
+				e.setIp(rs.getString("board_ip"));
+				e.setDel(rs.getInt("board_del"));
+				list.add(e);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs,pstmt,con);
+		}
+		
+		return list;
+	}
+
+	public int boardDel(BoardDTO dto) {
+		int result = 0;
+		
+		Connection con = db.getConnection();
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE board SET board_del=? WHERE board_no=?";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, dto.getDel()+"");
+			pstmt.setInt(2, dto.getNo());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(null,pstmt,con);
+		}
+		
+
+		return result;
+	}
 }
