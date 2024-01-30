@@ -29,6 +29,7 @@ $(function(){
 		dataType : 'text',
 		data : {'no': no, 'del' : del.val()},
 		success : function(result){
+			if(result == 1){
 			if(del.val() == 1){
 				className.attr('class','row0');
 				del.val(0);
@@ -38,6 +39,9 @@ $(function(){
 				className.attr('class','row1');
 				del.val(1);
 				eyes.attr('class','xi-eye changeDel');
+			}
+			} else {
+				alert("문제가 발생했습니다.");
 			}
 		},
 		error : function(error){
