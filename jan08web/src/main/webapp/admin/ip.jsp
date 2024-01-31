@@ -78,6 +78,7 @@
 						<input type="text" id="search">
 						<button id="searchBtn">검색</button>
 					</div>
+					<button onclick="location.href='./ip'">초기화</button>
 				</div>
 				<table>
 					<thead>
@@ -93,7 +94,7 @@
 						<c:forEach items="${list }" var="row">
 							<tr class="row">
 								<td class="d1">${row.ipno }</td>
-								<td class="d2">${row.iip }</td>
+								<td class="d2"><a href="./ip?ip=${row.iip}">${row.iip }</a></td>
 								<td class="d1">${row.idate }</td>
 								<td class="d2">${row.iurl }</td>
 								<td class="d2">${row.idata }</td>
