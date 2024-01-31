@@ -5,9 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.king.dto.BoardDTO;
+import com.king.dto.CommentDTO;
 import com.king.dto.MemberDTO;
 
 public class AdminDAO extends AbstractDAO {
@@ -188,4 +191,76 @@ public class AdminDAO extends AbstractDAO {
 
 		return result;
 	}
+
+	public List<CommentDTO> commentList() {
+		List<CommentDTO> list = new ArrayList<CommentDTO>();
+		Connection con = db.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "select c.cno, c.board_no, SUBSTRING(REPLACE(c.ccomment, '<br>', ' '),1, 15) as ccomment, "
+				+ "if(date_format(c.cdate,'%Y-%m-%d') = date_format(current_timestamp(),'%Y-%m-%d'), "
+				+ "date_format(c.cdate,'%h:%i'),date_format(c.cdate,'%Y-%m-%d')) AS cdate, "
+				+ "c.clike, m.mno, m.mid, m.mname, c.cip , c.cdel "
+				+ "from (comment c join member m on(c.mno = m.mno)) "
+				+ "order by c.cno desc";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				CommentDTO e = new CommentDTO();
+				e.setCno(rs.getInt("cno"));
+				e.setBoard_no(rs.getInt("board_no"));
+				e.setComment(rs.getString("ccomment"));
+				e.setCdate(rs.getString("cdate"));
+				e.setClike(rs.getInt("clike"));
+				e.setMno(rs.getInt("mno"));
+				e.setMname(rs.getString("mname"));
+				e.setMid(rs.getString("mid"));
+				e.setCip(rs.getString("cip"));
+				e.setDel(rs.getInt("cdel"));
+				list.add(e);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs,pstmt,con);
+		}
+		
+		return list;
+	}
+
+	public List<Map<String, Object>> ipList() {
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		Connection con = db.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT ipno,iip,idate,iurl,idata FROM iplog ORDER BY ipno DESC";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Map<String, Object> e = new HashMap<String, Object>();
+				e.put("ipno", rs.getInt("ipno"));
+				e.put("iip", rs.getString("iip"));
+				e.put("idate", rs.getString("idate"));
+				e.put("iurl", rs.getString("iurl"));
+				e.put("idata", rs.getString("idata"));
+				list.add(e);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs,pstmt,con);
+		}
+		
+		return list;
+		
+	}
+	
 }

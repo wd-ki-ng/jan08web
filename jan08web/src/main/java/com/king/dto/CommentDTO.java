@@ -1,7 +1,7 @@
 package com.king.dto;
 
 public class CommentDTO {
-	private int cno, board_no, mno, clike;
+	private int cno, board_no, mno, clike, del;
 	private String comment, mname, cdate, mid, cip;
 	public String getCip() {
 		return cip;
@@ -57,7 +57,12 @@ public class CommentDTO {
 	public void setCdate(String cdate) {
 		this.cdate = cdate;
 	}
-	
+	public int getDel() {
+		return del;
+	}
+	public void setDel(int del) {
+		this.del = del;
+	}
 	
 	
 	

@@ -7,6 +7,7 @@
 					<li onclick="url('./members')"><i class="xi-users"></i>회원 관리</li>
 					<li onclick="url('./board')"><i class="xi-document"></i>게시글 관리</li>
 					<li onclick="url('./comments')"><i class="xi-forum-o"></i>댓글 관리</li>
+					<li class="menu-item" onclick="url('./ip')"><i class="xi-forum-o"></i> ip 관리</li>
 					<li onclick="url('./info')"><i class="xi-lock-o"></i>king님</li>
 					<li></li>
 					<li></li>

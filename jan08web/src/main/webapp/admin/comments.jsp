@@ -29,7 +29,6 @@ $(function(){
 		dataType : 'text',
 		data : {'no': no, 'del' : del.val()},
 		success : function(result){
-			if(result == 1){
 			if(del.val() == 1){
 				className.attr('class','row0');
 				del.val(0);
@@ -39,9 +38,6 @@ $(function(){
 				className.attr('class','row1');
 				del.val(1);
 				eyes.attr('class','xi-eye changeDel');
-			}
-			} else {
-				alert("문제가 발생했습니다.");
 			}
 		},
 		error : function(error){
@@ -63,7 +59,7 @@ $(function(){
 			<!--  이 페이지에 오는 모든 사람은 관리자인지 검사를 합니다.
 			관리자 경우 보여주고, 로그인 하지 않았거나 일반 사용자는 로그인 페이지로 이동시킵니다.-->		
 			<article>
-				<h2>게시글 관리</h2>
+				<h2>댓긓 관리</h2>
 			<div class="search">
 				<input type="text" id="search"><button id="searchBtn">검색</button>
 			</div>
@@ -72,35 +68,26 @@ $(function(){
 					<thead>
 						<tr>
 							<th>번호</th>
-							<th>제목</th>
+							<th>내용</th>
 							<th>글쓴이</th>
 							<th>날짜</th>
-							<th>아이피</th>
-							<th>방문자</th>
 							<th>삭제</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${list}" var="row">
-						<tr>
-							<td class="d2">${row.no}</td>
-							<td class="d2">${row.title}<c:if test="${row.comment ne 0 }"><span>[${row.comment}]</span></c:if></td>
-							<td class="d1">${row.write}</td>									
-							<td class="d1">${row.date}</td>
-							<td class="d1">${row.ip}</td>
-							<td class="d1">${row.count}</td>
-							<td class="d1">
-							<input type="hidden" id="del" value="${row.del}">
-							<c:if test="${row.del eq 0}"><i class="xi-eye-off-o changeDel"></i></c:if>
-							<c:if test="${row.del eq 1}"><i class="xi-eye changeDel"></i></c:if>
-								<!-- 
-								<select name="del">
-									<option <c:if test="${row.del eq 0}">selected="selected"</c:if> value="0" >0 삭제</option>
-									<option <c:if test="${row.del eq 1}">selected="selected"</c:if> value="1" >1 유지</option>
-								</select>
-								 -->	
-							</td>
-						</tr>
+								<c:forEach items="${list }" var="row">
+							<tr class="row${row.del }">
+								<td class="d1">${row.cno }</td>
+								<td class="title"><a href="../detail?no=${row.board_no }">${row.comment }</a></td>
+								<td class="d2">${row.mname }</td>
+								<td class="d1">${row.cdate }</td>
+								<td class="d1">${row.clike }</td>
+								<td class="d1">
+									<input type="hidden" class="del" value="${row.del }">
+									<c:if test="${row.del eq 1}"><i class="xi-eye changeDel"></i></c:if>
+									<c:if test="${row.del eq 0}"><i class="xi-eye-off-o changeDel"></i></c:if>
+								</td>
+							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
