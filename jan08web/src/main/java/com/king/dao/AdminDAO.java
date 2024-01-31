@@ -237,7 +237,7 @@ public class AdminDAO extends AbstractDAO {
 		Connection con = db.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		String sql = "SELECT ipno,iip,idate,iurl,idata FROM iplog ORDER BY ipno DESC";
+		String sql = "SELECT ipno,iip,idate,iurl,idata FROM iplog GROUP BY iip ORDER BY ipno DESC";
 		
 		try {
 			pstmt = con.prepareStatement(sql);
@@ -261,6 +261,61 @@ public class AdminDAO extends AbstractDAO {
 		
 		return list;
 		
+	}
+
+	public List<Map<String, Object>> ipAccessList5() {
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		Connection con = db.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT iip, COUNT(*) AS count FROM iplog GROUP BY iip ORDER BY COUNT(*) DESC LIMIT 0, 5";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Map<String, Object> e = new HashMap<String, Object>();
+				e.put("iip", rs.getString("iip"));
+				e.put("count", rs.getInt("count"));
+				list.add(e);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs,pstmt,con);
+		}
+		
+		return list;
+		
+	}
+
+	public List<Map<String, Object>> ipAccessList10() {
+		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+		Connection con = db.getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT iip, idate AS count FROM iplog ORDER BY idate DESC LIMIT 0, 10";
+		
+		try {
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				Map<String, Object> e = new HashMap<String, Object>();
+				e.put("iip", rs.getString("iip"));
+				e.put("count", rs.getInt("count"));
+				list.add(e);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rs,pstmt,con);
+		}
+		
+		return list;
 	}
 	
 }

@@ -26,8 +26,14 @@ public class Ip extends HttpServlet {
 		AdminDAO dao = new AdminDAO();
 		
 		List<Map<String, Object>> list = dao.ipList();
-		
 		request.setAttribute("list", list);
+		
+		List<Map<String, Object>> list2 = dao.ipAccessList5();
+		request.setAttribute("list2", list2);
+
+		List<Map<String, Object>> list3 = dao.ipAccessList10();
+		request.setAttribute("list3", list3);
+		
 		
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/admin/ip.jsp");
