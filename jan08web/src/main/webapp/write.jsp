@@ -38,6 +38,7 @@
 		<div class="mainstyle">
 			<article>
 				<form action="./write" method="post">
+					<input type="hidden" name="write" id="${param.write}">
 					<input type="text" name="title" id="title">
 					<textarea id="summernote" name="content"></textarea>
 					<button type="submit" >저장</button>
